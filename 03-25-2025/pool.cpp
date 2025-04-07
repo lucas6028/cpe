@@ -8,8 +8,9 @@ typedef long double ld;
 #define ff first
 #define ss second
 
+/*
 bool cmp(pii& pa, pii& pb) {
-    return pa.ss < pb.ss;
+    return pa.ff < pb.ff;
 }
 
 void helper(size_t p, vector<pii>& vc, ll totVol, ll totTemp, ll start, ll capacity, ll temperature, ld& diff, pii& res) {
@@ -29,6 +30,7 @@ void helper(size_t p, vector<pii>& vc, ll totVol, ll totTemp, ll start, ll capac
     }
     helper(p + 1, vc, totVol, totTemp, start, capacity, temperature, diff, res);
 }
+*/
 
 void solve() {
     ll capacity, temperature;
@@ -37,20 +39,41 @@ void solve() {
     cin >> capacity >> temperature; 
     cin >> n;
 
-    vector<pii> vc(n);
+    ll half = ceil((ld)capacity / 2.0);
+    vector<pii> jars(n);
+    // Calculate prefix sum
+    vector<ll> prefix(n + 1, 0), prefixVol(n + 1, 0);
     for (ll i = 0; i < n; ++i) {
-        cin >> vc[i].ff >> vc[i].ss;
+        cin >> jars[i].ff >> jars[i].ss;
+        prefix[i + 1] = prefix[i] + (jars[i].ff * jars[i].ss);
+        prefixVol[i + 1] = prefixVol[i] + jars[i].ff;
     }
-    sort(vc.begin(), vc.end(), cmp);
 
-    pii res;
-    ld diff = 5.1;
-    helper(0, vc, -1, 0, 0, capacity, temperature, diff, res);
-    if (diff > 5.0) {
+    int start = -1, end = -1;
+    ld diff = 10.0;
+    for (int i = 0; i < n; ++i) {
+        for (int j = i; j < n; ++j) {
+            ll tot = prefix[j + 1] - prefix[i];
+            ll vol = prefixVol[j + 1] - prefixVol[i];
+            //cerr << tot << ' ' << vol << '\n';
+
+            if (vol < half) continue;
+            if (vol > capacity) break;
+
+            ld curr = abs((ld)tot / (ld)vol - (ld)temperature);
+            //cerr << "curr: " << curr << '\n';
+            if (curr <= 5.0 && curr < diff) {
+                diff = curr;
+                start = i;
+                end = j;
+            }
+        }
+    }
+    if (diff == 10.0) {
         cout << "Not possible\n";
     }
     else {
-        cout << res.ff << ' ' << res.ss << '\n';
+        cout << start << ' ' << end << '\n';
     }
 }
 
