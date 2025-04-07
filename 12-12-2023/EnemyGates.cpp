@@ -8,6 +8,19 @@ void solve() {
 		cout << m << '\n';
 		return ;
 	}
+	if (n == m) {
+		cout << m - 3 << '\n';
+		return ;
+	}
+	int sum = n - 3;
+	int p = n;
+	int cnt = 1;
+	while (p <= m) {
+		sum--;
+		p += cnt;
+		cnt++;	
+	}
+	cout << sum + 1 << '\n';
 }
 
 int main() {
