@@ -9,7 +9,6 @@ int f[maxn];
 int visited[maxn];
 
 void findCycle(int u) {
-//    cerr << "cycle: ";
     stack<int> stk;
     int v = adj[u];
     stk.push(u);
@@ -24,9 +23,7 @@ void findCycle(int u) {
         stk.pop();
         f[v] = len;
         visited[v] = 2;
- //       cerr << v + 1 << " ";
     }
-  //  cerr << "\n";
 }
 
 int dfs(int u) {
@@ -77,12 +74,6 @@ void solve() {
             sz = f[i];
         }
     }
-    /*
-    for (int i = 0; i < n; ++i) {
-        cerr << f[i] << " ";
-    }
-    cerr << "\n";
-    */
     cout << start + 1 << "\n";
 }
 
